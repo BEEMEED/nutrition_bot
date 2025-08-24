@@ -70,7 +70,7 @@ async def vivod_stat(query:CallbackQuery,bot:Bot):
         f"💧 {user_data.get('water', 0)}мл"
     )
     
-    photo_patch = get_project_root() / f"pidor_{user_id}.png"
+    photo_patch = get_project_root() / f"photo_{user_id}.png"
     assert query.message is not None
     try:
         if photo_patch.exists():
