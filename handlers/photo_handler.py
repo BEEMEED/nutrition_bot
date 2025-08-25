@@ -77,7 +77,7 @@ async def photo_et(mes: Message, bot: Bot):
     
     await mes.answer("фото получено")
     result = (
-        image_etik(name=destination, user_id=user_id, weight=weight,month=day_month)
+        image_etik(name=destination, user_id=user_id,month=day_month)
         or "Не удалось определить блюдо."
     )
     await mes.answer(result, reply_markup=back)
