@@ -6,6 +6,7 @@ from aiogram.types import CallbackQuery, FSInputFile
 from ml.graphics import photo_cal
 from utils.db import get_db, save_db  
 from utils.path_utils import get_project_root
+from utils.keyboards.stats_menu import kb_stat
 import os
 
 router = Router()
@@ -75,9 +76,10 @@ async def vivod_stat(query:CallbackQuery,bot:Bot):
     try:
         if photo_patch.exists():
             await bot.send_photo(
-                chat_id=query.message.chat.id,
+                chat_id=query.from_user.id,
                 photo=FSInputFile(photo_patch),
-                caption=text
+                caption=text,
+                reply_markup=kb_stat
             )
     finally:
         if photo_patch.exists():

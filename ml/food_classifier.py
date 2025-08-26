@@ -16,7 +16,10 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 
-def image_photo(name,user_id,weight,month):
+def image_photo(name,user_id,weight,month,action):
+    label = "Проанализируй этикетку на фото и опиши блюдо.\nОцени калории и БЖУ на столько то граммах сколько указано на бирке,если граммовка не указана на упаковке то 100г."
+    photo = "Проанализируй фото и опиши блюдо.\nОцени калории и БЖУ на {weight} граммах,если если граммовка указана как 0 то 250г."
+    promt = label if action == label else photo
     image_path = name
     base64_image = encode_image(image_path)
     response = client.chat.completions.create(
@@ -25,8 +28,7 @@ def image_photo(name,user_id,weight,month):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": f'''Проанализируй фото и опиши блюдо.  
-                                                Оцени калории и БЖУ на {weight} граммах,если если граммовка указана как 0 то 250г.  
+                    {"type": "text", "text": f'''{promt}  
                                                 Ответь строго по шаблону:
 
                                                 🍽 Результат анализа
@@ -54,43 +56,5 @@ def image_photo(name,user_id,weight,month):
     text(message=response.choices[0].message.content,user_id=user_id)
     return response.choices[0].message.content
 
-def image_etik(name,user_id,month):
-    image_path = name
-    base64_image = encode_image(image_path)
-    response = client.chat.completions.create(
-    model="Qwen2-VL-7B-Instruct",
-    messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": f'''Проанализируй фото и опиши блюдо.  
-                                                Оцени калории и БЖУ на столько то граммах,если граммовка не указана на упаковке то 250г.  
-                                                Ответь строго по шаблону:
-
-                                                🍽 Результат анализа
-                                                [Название блюда] (вес г)
-                                                🔥[XXX] ккал | Б: [X.X] г | Ж: [X.X] г | У: [X.X] г
-
-                                                🎯 итого:
-                                                🔥[XXX] ккал
-                                                💪Белки: [X.X] г
-                                                🧈Жиры: [X.X] г
-                                                🍞Углеводы: [X.X] г
-
-                                                Не добавляй пояснений, комментариев, предупреждений. Только шаблон.'''},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{base64_image}"
-                        }
-                    }
-                ]
-            }
-        ],
-        max_tokens=512
-    )
-    text(message=response.choices[0].message.content,user_id=user_id)
-    return response.choices[0].message.content
-router = Router()
 
     

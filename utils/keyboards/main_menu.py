@@ -6,7 +6,7 @@ class ScanCB(CallbackData, prefix="scan"):
 
 kb = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="по фото", callback_data=ScanCB(value="photo").pack())],
-    [InlineKeyboardButton(text="по этикетке", callback_data=ScanCB(value="etik").pack())],
+    [InlineKeyboardButton(text="по этикетке", callback_data=ScanCB(value="label").pack())],
     [InlineKeyboardButton(text="статистика за день",callback_data="stats")]
 ])
 
